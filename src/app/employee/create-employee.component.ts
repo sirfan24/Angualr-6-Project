@@ -38,4 +38,17 @@ export class CreateEmployeeComponent implements OnInit {
 
   }
 
+  onLoadDataClick() : void {
+    // difference between setValue and patchValue methods
+    this.employeeForm.patchValue({
+      fullName: 'Pragim Technologies',
+      email: 'pragin@pragimtech.com',
+      skills:{
+        skillName: 'C#',
+        //experienceInYears: 5,
+        proficiency: 'beginner'
+      }
+    })
+  }
+
 }
