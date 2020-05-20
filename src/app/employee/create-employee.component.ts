@@ -14,6 +14,7 @@ export class CreateEmployeeComponent implements OnInit {
  constructor(private fb: FormBuilder) { }
 
   employeeForm: FormGroup;
+  fullNameLength = 0;
  
   ngOnInit(): void {
 
@@ -27,8 +28,14 @@ export class CreateEmployeeComponent implements OnInit {
         experienceInYears:[''],
         proficiency:['beginner']
       })
+    });
 
-    })
+    this.employeeForm.get('fullName').valueChanges.subscribe(
+      (value: string) => {
+        this.fullNameLength = value.length;
+        //console.log(value);
+      }
+    );
   }
 
 
