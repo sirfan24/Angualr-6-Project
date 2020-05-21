@@ -42,7 +42,7 @@ export class CreateEmployeeComponent implements OnInit {
     'email' : '',
     'skillName': '',
     'experienceInYears':'',
-    'Proficiency':''
+    'proficiency':''
   };
  
   ngOnInit(): void {
@@ -59,15 +59,14 @@ export class CreateEmployeeComponent implements OnInit {
       })
     });
 
-    //this.employeeForm.get('fullName').valueChanges.subscribe(
-    //   (value: string) => {
-    //     this.fullNameLength = value.length;
-    //     //console.log(value);
-    //   }
-    //);
+    this.employeeForm.valueChanges.subscribe(
+      (data) => {
+        this.logValidationErrors(this.employeeForm);
+      }
+    );
   }
   
-  logValidationErrors(group: FormGroup) : void {
+  logValidationErrors(group: FormGroup = this.employeeForm) : void {
      Object.keys(group.controls).forEach((key:string) => 
      {
        // key = fullName
@@ -76,7 +75,8 @@ export class CreateEmployeeComponent implements OnInit {
          this.logValidationErrors(abstractControl);
        }else{
          this.formErrors[key] = '';
-        if(abstractControl && !abstractControl.valid ){
+        if(abstractControl && !abstractControl.valid && 
+          (abstractControl.touched)|| (abstractControl.dirty)){
           const messages = this.validationMessages[key];
           console.log(messages);
           for (const errorKey in abstractControl.errors){
@@ -84,7 +84,6 @@ export class CreateEmployeeComponent implements OnInit {
               this.formErrors[key] += messages[errorKey] + '';
             }
           }
-
         }
        }
      });
@@ -103,8 +102,8 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   onLoadDataClick() : void {
-    this.logValidationErrors(this.employeeForm);
-    console.log(this.formErrors);
+    // this.logValidationErrors(this.employeeForm);
+    // console.log(this.formErrors);
   }
 
 }
