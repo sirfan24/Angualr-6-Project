@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms'
+import { GroupedObservable } from 'rxjs';
 
 @Component({
   selector: 'app-create-employee', 
@@ -30,12 +31,25 @@ export class CreateEmployeeComponent implements OnInit {
       })
     });
 
-    this.employeeForm.get('fullName').valueChanges.subscribe(
-      (value: string) => {
-        this.fullNameLength = value.length;
-        //console.log(value);
-      }
-    );
+    //this.employeeForm.get('fullName').valueChanges.subscribe(
+    //   (value: string) => {
+    //     this.fullNameLength = value.length;
+    //     //console.log(value);
+    //   }
+    //);
+  }
+  
+  logKeyValuePairs(group: FormGroup) : void {
+     Object.keys(group.controls).forEach((key:string) => 
+     {
+       const abstractControl = group.get(key);
+       if(abstractControl instanceof FormGroup){
+         this.logKeyValuePairs(abstractControl);
+       }else{
+        abstractControl.disable();
+         //console.log('key =' + key + '; value =' + abstractControl.value );
+       }
+     });
   }
 
 
@@ -51,16 +65,8 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   onLoadDataClick() : void {
-    // difference between setValue and patchValue methods
-    this.employeeForm.patchValue({
-      fullName: 'Pragim Technologies',
-      email: 'pragin@pragimtech.com',
-      skills:{
-        skillName: 'C#',
-        //experienceInYears: 5,
-        proficiency: 'beginner'
-      }
-    })
+
+    this.logKeyValuePairs(this.employeeForm);
   }
 
 }
