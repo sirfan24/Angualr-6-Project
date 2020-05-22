@@ -26,8 +26,11 @@ export class CreateEmployeeComponent implements OnInit {
     'email': {
       'required' : 'Email Name is required'
     },
+    'phone': {
+      'required' : 'Phone is required'
+    },
     'skillName': {
-      'required' : 'skillName is required'
+      'required' : 'SkillName is required'
     },
     'experienceInYears': {
       'required' : 'Experience In Years is required'
@@ -40,6 +43,7 @@ export class CreateEmployeeComponent implements OnInit {
   formErrors = {
     'fullName': '',
     'email' : '',
+    'phone' : '',
     'skillName': '',
     'experienceInYears':'',
     'proficiency':''
@@ -51,7 +55,9 @@ export class CreateEmployeeComponent implements OnInit {
     this.employeeForm = this.fb.group({
       // All validator functions are sttaic functions, they dont need an instance.
       fullName:['',[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
+      ContactPreference:['email'],
       email:['', Validators.required],
+      phone:[''],
       skills: this.fb.group({
         skillName:['', Validators.required],
         experienceInYears:['', Validators.required],
@@ -62,6 +68,18 @@ export class CreateEmployeeComponent implements OnInit {
     this.employeeForm.valueChanges.subscribe(
       (data) => {
         this.logValidationErrors(this.employeeForm);
+      }
+    );
+
+    this.employeeForm.get('ContactPreference').valueChanges.subscribe(
+      (selectedValue:string) => {
+        if(selectedValue === 'phone'){
+          this.employeeForm.get('phone').setValidators(Validators.required),
+          this.employeeForm.get('phone').updateValueAndValidity()
+        }else{ 
+          this.employeeForm.get('phone').clearValidators()
+          this.employeeForm.get('phone').updateValueAndValidity()
+        }
       }
     );
   }
