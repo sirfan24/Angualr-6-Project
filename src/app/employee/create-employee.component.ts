@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms'
+import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms'
 import { GroupedObservable } from 'rxjs';
 
 @Component({
@@ -24,7 +24,8 @@ export class CreateEmployeeComponent implements OnInit {
       'maxlength' : 'Full Name must be less than 10 charecters'
     },
     'email': {
-      'required' : 'Email Name is required'
+      'required' : 'Email Name is required',
+      'emailDomain' : 'Domain should be prajimtech.com'
     },
     'phone': {
       'required' : 'Phone is required'
@@ -56,7 +57,7 @@ export class CreateEmployeeComponent implements OnInit {
       // All validator functions are sttaic functions, they dont need an instance.
       fullName:['',[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
       ContactPreference:['email'],
-      email:['', Validators.required],
+      email:['', [Validators.required,emailDomain]],
       phone:[''],
       skills: this.fb.group({
         skillName:['', Validators.required],
@@ -125,3 +126,14 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
 }
+function emailDomain(control: AbstractControl): { [key: string]: any } | null {
+  const email: string = control.value;
+  const domain = email.substring(email.lastIndexOf('@') + 1);
+  if (email === '' || domain.toLowerCase() === 'pragimtech.com') {
+    return null;
+  } else {
+    return { 'emailDomain': true }
+  }
+}
+
+
