@@ -24,7 +24,7 @@ export class CreateEmployeeComponent implements OnInit {
       'maxlength' : 'Full Name must be less than 10 charecters'
     },
     'email': {
-      'required' : 'Email Name is required',
+      'required' : 'Email is required',
       'emailDomain' : 'Domain should be prajimtech.com'
     },
     'phone': {
@@ -57,7 +57,7 @@ export class CreateEmployeeComponent implements OnInit {
       // All validator functions are sttaic functions, they dont need an instance.
       fullName:['',[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
       ContactPreference:['email'],
-      email:['', [Validators.required,emailDomain]],
+      email:['', [Validators.required,emailDomain('pragimtech.com')]],
       phone:[''],
       skills: this.fb.group({
         skillName:['', Validators.required],
@@ -126,14 +126,16 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
 }
-function emailDomain(control: AbstractControl): { [key: string]: any } | null {
+function emailDomain(domainName:string) {
+  return (control: AbstractControl): { [key: string]: any } | null => {
   const email: string = control.value;
   const domain = email.substring(email.lastIndexOf('@') + 1);
-  if (email === '' || domain.toLowerCase() === 'pragimtech.com') {
+  if (email === '' || domain.toLowerCase() === domainName.toLowerCase()) {
     return null;
   } else {
     return { 'emailDomain': true }
   }
+}
 }
 
 
