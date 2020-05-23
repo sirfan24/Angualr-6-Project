@@ -28,6 +28,12 @@ export class CreateEmployeeComponent implements OnInit {
       'required' : 'Email is required',
       'emailDomain' : 'Domain should be prajimtech.com'
     },
+    'confirmEmail': {
+      'required' : 'Confrim Email is required',
+    },
+    'emailGroup': {
+      'missMatch' : 'Confrim Email doesnt match with the email provided',
+    },
     'phone': {
       'required' : 'Phone is required'
     },
@@ -45,6 +51,8 @@ export class CreateEmployeeComponent implements OnInit {
   formErrors = {
     'fullName': '',
     'email' : '',
+    'confirmEmail' : '',
+    'emailGroup' : '',
     'phone' : '',
     'skillName': '',
     'experienceInYears':'',
@@ -57,8 +65,11 @@ export class CreateEmployeeComponent implements OnInit {
     this.employeeForm = this.fb.group({
       // All validator functions are sttaic functions, they dont need an instance.
       fullName:['',[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
-      ContactPreference:['email'],
-      email:['', [Validators.required,CustomValidators.emailDomain('pragimtech.com')]],
+      contactPreference:['email'],
+      emailGroup : this.fb.group({
+        email:['', [Validators.required,CustomValidators.emailDomain('pragimtech.com')]],
+        confirmEmail:['', Validators.required],
+      }, {validator : matchEmail}),
       phone:[''],
       skills: this.fb.group({
         skillName:['', Validators.required],
@@ -73,7 +84,7 @@ export class CreateEmployeeComponent implements OnInit {
       }
     );
 
-    this.employeeForm.get('ContactPreference').valueChanges.subscribe(
+    this.employeeForm.get('contactPreference').valueChanges.subscribe(
       (selectedValue:string) => {
         if(selectedValue === 'phone'){
           this.employeeForm.get('phone').setValidators(Validators.required),
@@ -89,22 +100,21 @@ export class CreateEmployeeComponent implements OnInit {
   logValidationErrors(group: FormGroup = this.employeeForm) : void {
      Object.keys(group.controls).forEach((key:string) => 
      {
-       // key = fullName
+       
        const abstractControl = group.get(key);
+
+       this.formErrors[key] = '';
+       if(abstractControl && !abstractControl.valid && 
+         (abstractControl.touched)|| (abstractControl.dirty)){
+         const messages = this.validationMessages[key];  
+         for (const errorKey in abstractControl.errors){
+           if (errorKey){
+             this.formErrors[key] += messages[errorKey] + ' ';
+           }
+         }
+       }
        if(abstractControl instanceof FormGroup){
          this.logValidationErrors(abstractControl);
-       }else{
-         this.formErrors[key] = '';
-        if(abstractControl && !abstractControl.valid && 
-          (abstractControl.touched)|| (abstractControl.dirty)){
-          const messages = this.validationMessages[key];
-          console.log(messages);
-          for (const errorKey in abstractControl.errors){
-            if (errorKey){
-              this.formErrors[key] += messages[errorKey] + '';
-            }
-          }
-        }
        }
      });
   }
@@ -127,3 +137,15 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
 }
+
+function matchEmail(group: AbstractControl): { [key: string]: any } | null {
+
+  const emailControl = group.get('email');
+  const confirmEmailControl = group.get('confirmEmail');
+
+  if (emailControl.value === confirmEmailControl.value || confirmEmailControl.pristine) {
+    return null
+  } else {
+    return { 'missMatch': true }
+  }
+} 
