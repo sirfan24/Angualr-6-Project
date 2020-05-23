@@ -133,6 +133,9 @@ export class CreateEmployeeComponent implements OnInit {
       proficiency:['', Validators.required]
     })
   }
+  addSkillButtonClick(): void{
+    (<FormArray>this.employeeForm.get('skills')).push(this.addSkillFormGroup())
+  }
 
 
   onSubmit(): void {
