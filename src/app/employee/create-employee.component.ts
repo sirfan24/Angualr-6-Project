@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms'
-import { GroupedObservable } from 'rxjs';
+import { CustomValidators} from '../shared/customValidators' 
+
 
 @Component({
   selector: 'app-create-employee', 
@@ -57,7 +58,7 @@ export class CreateEmployeeComponent implements OnInit {
       // All validator functions are sttaic functions, they dont need an instance.
       fullName:['',[Validators.required, Validators.minLength(2), Validators.maxLength(10)]],
       ContactPreference:['email'],
-      email:['', [Validators.required,emailDomain('pragimtech.com')]],
+      email:['', [Validators.required,CustomValidators.emailDomain('pragimtech.com')]],
       phone:[''],
       skills: this.fb.group({
         skillName:['', Validators.required],
@@ -126,16 +127,3 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
 }
-function emailDomain(domainName:string) {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-  const email: string = control.value;
-  const domain = email.substring(email.lastIndexOf('@') + 1);
-  if (email === '' || domain.toLowerCase() === domainName.toLowerCase()) {
-    return null;
-  } else {
-    return { 'emailDomain': true }
-  }
-}
-}
-
-
