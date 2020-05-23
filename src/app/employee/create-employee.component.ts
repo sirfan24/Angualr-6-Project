@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms'
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray} from '@angular/forms'
 import { CustomValidators} from '../shared/customValidators' 
 
 
@@ -71,11 +71,9 @@ export class CreateEmployeeComponent implements OnInit {
         confirmEmail:['', Validators.required],
       }, {validator : matchEmail}),
       phone:[''],
-      skills: this.fb.group({
-        skillName:['', Validators.required],
-        experienceInYears:['', Validators.required],
-        proficiency:['', Validators.required]
-      })
+      skills: this.fb.array([
+        this.addSkillFormGroup()
+      ])
     });
 
     this.employeeForm.valueChanges.subscribe(
@@ -116,7 +114,24 @@ export class CreateEmployeeComponent implements OnInit {
        if(abstractControl instanceof FormGroup){
          this.logValidationErrors(abstractControl);
        }
+       if(abstractControl instanceof FormArray){
+         for(const control of abstractControl.controls ){
+           if(control instanceof FormGroup ){
+            this.logValidationErrors(control);
+
+           }
+         }
+      }
+      console.log(this.formErrors);
      });
+  }
+
+  addSkillFormGroup() : FormGroup{
+    return this.fb.group({
+      skillName:['', Validators.required],
+      experienceInYears:['', Validators.required],
+      proficiency:['', Validators.required]
+    })
   }
 
 
