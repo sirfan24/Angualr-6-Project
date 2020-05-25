@@ -36,27 +36,11 @@ export class CreateEmployeeComponent implements OnInit {
     },
     'phone': {
       'required' : 'Phone is required'
-    },
-    'skillName': {
-      'required' : 'SkillName is required'
-    },
-    'experienceInYears': {
-      'required' : 'Experience In Years is required'
-    },
-    'proficiency': {
-      'required' : 'Proficiency is required'
-    },
+    }    
   };
 
   formErrors = {
-    'fullName': '',
-    'email' : '',
-    'confirmEmail' : '',
-    'emailGroup' : '',
-    'phone' : '',
-    'skillName': '',
-    'experienceInYears':'',
-    'proficiency':''
+    
   };
  
   ngOnInit(): void {
@@ -114,14 +98,7 @@ export class CreateEmployeeComponent implements OnInit {
        if(abstractControl instanceof FormGroup){
          this.logValidationErrors(abstractControl);
        }
-       if(abstractControl instanceof FormArray){
-         for(const control of abstractControl.controls ){
-           if(control instanceof FormGroup ){
-            this.logValidationErrors(control);
-
-           }
-         }
-      }
+      
       console.log(this.formErrors);
      });
   }
