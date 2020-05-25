@@ -69,12 +69,14 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-4">
-                    <button (click)="addSkillButtonClick()" class="btn btn-primary" type="button">Add Skill</button>
+                    <button (click)="addSkillButtonClick()" [disabled]="employeeForm.get('skills').invalid" class="btn btn-primary" type="button">Add Skill</button>
                 </div>
             </div>
 
                 <div formArrayName="skills" *ngFor="let skill of employeeForm.get('skills')['controls']; let i = index">
                     <div [formGroupName] = "i">
+                       <hr *ngIf="i>0">
+
                         <div class="form-group" [ngClass]="{'has-error' : skill.get('skillName').invalid && 
                                                             skill.get('skillName').touched}">
                             <label class="col-sm-2 control-label" [attr.for]="'skillName'+i">
@@ -121,11 +123,11 @@
                                         formControlName="proficiency">Advanced
                                 </label>
                             </div>
+                          
                             <span class="help-block" *ngIf="skill.get('proficiency').errors?.required && skill.get('proficiency').touched">
                                 Proficiency is required
                             </span>
                         </div>
-                       <hr class="solid">
 
                     </div>
                 </div>
