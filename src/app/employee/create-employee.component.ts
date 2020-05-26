@@ -40,6 +40,14 @@ export class CreateEmployeeComponent implements OnInit {
   };
 
   formErrors = {
+    'fullName': '',
+    'email' : '',
+    'confirmEmail' : '',
+    'emailGroup' : '',
+    'phone' : '',
+    'skillName': '',
+    'experienceInYears':'',
+    'proficiency':''
     
   };
  
@@ -78,6 +86,10 @@ export class CreateEmployeeComponent implements OnInit {
       }
     );
   }
+
+  removeSkillButtonClick(skillGroupIndex : number):void {
+      (<FormArray>this.employeeForm.get('skills')).removeAt(skillGroupIndex);
+  }
   
   logValidationErrors(group: FormGroup = this.employeeForm) : void {
      Object.keys(group.controls).forEach((key:string) => 
@@ -99,7 +111,6 @@ export class CreateEmployeeComponent implements OnInit {
          this.logValidationErrors(abstractControl);
        }
       
-      console.log(this.formErrors);
      });
   }
 
