@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {IEmployee} from './IEmployee';
 import {EmployeeService} from './employee.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -10,7 +11,8 @@ import {EmployeeService} from './employee.service';
 })
 export class ListEmployeesComponent implements OnInit {
 
-  constructor(private _employeeService : EmployeeService) { }
+  constructor(private _employeeService : EmployeeService,
+              private _router : Router) { }
 
   employees : IEmployee[];
 
@@ -19,6 +21,10 @@ export class ListEmployeesComponent implements OnInit {
       (listEmployees) => this.employees = listEmployees,
       (err) => console.log(err)
     )
+  }
+
+  editButtonClick(employeeId: number): void {
+this._router.navigate(['/edit', employeeId]);
   }
 
 }
