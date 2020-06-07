@@ -120,10 +120,28 @@ export class CreateEmployeeComponent implements OnInit {
       },
       phone:employee.phone
     });
+
+    this.employeeForm.setControl('skills', this.setExistingSkills(employee.skills));
+  }
+
+  setExistingSkills(skillSets:ISkill[]):FormArray{
+    const formArray = new FormArray([]);
+    skillSets.forEach(s => {
+      formArray.push( this.fb.group({
+        skillName: s.skillName,
+        proficiency: s.proficiency,
+        experienceInYears: s.experienceInYears
+      }));
+    });
+    return formArray;
   }
 
   removeSkillButtonClick(skillGroupIndex : number):void {
-      (<FormArray>this.employeeForm.get('skills')).removeAt(skillGroupIndex);
+    const skillsFormArray = <FormArray>this.employeeForm.get('skills');
+    skillsFormArray.removeAt(skillGroupIndex);
+    skillsFormArray.markAsTouched();
+    skillsFormArray.markAsDirty();
+
   }
   
   logValidationErrors(group: FormGroup = this.employeeForm) : void {
