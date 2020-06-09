@@ -29,6 +29,15 @@ export class EmployeeService {
                 .pipe(catchError(this.handleError));
     }
 
+    updateEmployee(employee: IEmployee):Observable<void> {
+        return this.httpClient.put<void>(`${this.baseUrl}/${employee.id}` , employee, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        })
+                .pipe(catchError(this.handleError));
+    }
+
     deleteEmployee(id:number):Observable<void> {
         return this.httpClient.delete<void>(`${this.baseUrl}/${id}`)
                 .pipe(catchError(this.handleError));
