@@ -37,6 +37,20 @@
           "proficiency": "advanced"
         }
       ]
+    },
+    {
+      "id": 2,
+      "fullName": "david",
+      "phone": "2234456654",
+      "contactPreference": "email",
+      "email": "david@pragimtech.com",
+      "skills": [
+        {
+          "skillName": "flutter",
+          "proficiency": "beginner",
+          "experienceInYears": "0"
+        }
+      ]
     }
   ]
 }
