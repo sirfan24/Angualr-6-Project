@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray} from '@angular/forms'
-import { CustomValidators} from '../shared/customValidators' 
+import { CustomValidators} from '../shared/custom.validators' 
 import { ActivatedRoute } from '@angular/router';
 import {IEmployee} from './IEmployee';
 import {EmployeeService} from './employee.service';
