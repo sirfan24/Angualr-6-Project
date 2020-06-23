@@ -3,19 +3,20 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { HomeComponent } from './home.component';
 import { PageNotFoundComponent } from './page-not-found.component';
+import { CustomPreloadingService } from './custom-preloading.service';
 
 
 const routes: Routes = [
   {path:'home', component: HomeComponent },  
   {path: '', redirectTo: '/home', pathMatch:'full'},
-  {path: 'employees', 
+  {path: 'employees', data:{ preload : true},
     loadChildren: () => import ('./employee/employee.module').then(m=>
       m.EmployeeModule) },
   {path:'**', component: PageNotFoundComponent },  
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {preloadingStrategy : PreloadAllModules})],
+  imports: [RouterModule.forRoot(routes, {preloadingStrategy : CustomPreloadingService})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
